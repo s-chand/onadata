@@ -106,7 +106,7 @@ class TestFormSubmission(TestBase):
         """
         self.xform.require_auth = True
         self.xform.save()
-        self.xform.reload()
+        self.xform.refresh_from_db()
         self.assertTrue(self.xform.require_auth)
 
         xml_submission_file_path = os.path.join(
@@ -128,7 +128,7 @@ class TestFormSubmission(TestBase):
         """
         self.xform.require_auth = True
         self.xform.save()
-        self.xform.reload()
+        self.xform.refresh_from_db()
         self.assertTrue(self.xform.require_auth)
 
         xml_submission_file_path = os.path.join(
@@ -157,7 +157,7 @@ class TestFormSubmission(TestBase):
 
         self.xform.require_auth = True
         self.xform.save()
-        self.xform.reload()
+        self.xform.refresh_from_db()
         self.assertTrue(self.xform.require_auth)
 
         # create a new user
