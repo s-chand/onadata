@@ -20,7 +20,7 @@ from onadata.libs.mixins.openrosa_headers_mixin import OpenRosaHeadersMixin
 from onadata.libs.renderers.renderers import TemplateXMLRenderer
 from onadata.libs.serializers.data_serializer import (
     JSONSubmissionSerializer, RapidProSubmissionSerializer,
-    SubmissionSerializer)
+    SubmissionSerializer, FLOIPSubmissionSerializer)
 
 BaseViewset = get_baseviewset_class()  # pylint: disable=C0103
 
@@ -36,7 +36,6 @@ class XFormSubmissionViewSet(AuthenticateHeaderMixin,  # pylint: disable=R0901
     """
     XFormSubmissionViewSet class
     """
-
     authentication_classes = (DigestAuthentication, BasicAuthentication,
                               TokenAuthentication, EnketoTokenAuthentication)
     filter_backends = (filters.AnonDjangoObjectPermissionFilter, )
@@ -48,6 +47,9 @@ class XFormSubmissionViewSet(AuthenticateHeaderMixin,  # pylint: disable=R0901
     template_name = 'submission.xml'
 
     def get_serializer_class(self):
+        """
+        Returns the class that should be used for the serializer based on content_type.
+        """
         content_type = self.request.content_type.lower()
 
         if 'application/json' in content_type:
@@ -58,6 +60,9 @@ class XFormSubmissionViewSet(AuthenticateHeaderMixin,  # pylint: disable=R0901
 
         if 'application/x-www-form-urlencoded' in content_type:
             return RapidProSubmissionSerializer
+        
+        if 'application/flow-json' in content_type:
+            return FLOIPSubmissionSerializer
 
         return SubmissionSerializer
 
